@@ -106,10 +106,16 @@ class zeneditor(customtkinter.CTk):
         customtkinter.set_appearance_mode("dark")
         self.button_fg_color = "#3a2dad"
         self.button_hover_color = "#424572"
-        self.title(" Zen text editor")
+        self.title(" Zen Notepad")
         self.dontshowagain = 0
 
-        self.icon_path = os.path.join(os.getcwd(),"assets", "icon.ico")
+        if getattr(sys, 'frozen', False):
+            # If the application is running as a single file, use the _MEIPASS directory.
+             bundle_dir = sys._MEIPASS
+        else:
+            # Otherwise, use the regular assets directory.
+            bundle_dir = os.path.dirname(os.path.abspath(__file__))
+        self.icon_path = os.path.join(bundle_dir, "assets", "icon.ico")
         self.iconbitmap(self.icon_path)
         
         self.mini_font = ctk.CTkFont(family="Candara", size=28)
@@ -123,7 +129,7 @@ class zeneditor(customtkinter.CTk):
         # Add a toggle button to hide/show the menu
         self.toggle_menu_button = ctk.CTkButton(self.menu, text="Hide Menu", command=self.toggle_menu, hover_color = self.button_hover_color, fg_color=self.button_fg_color)
         self.toggle_menu_button.grid(row=0, column=5, padx=2)
-        self.sample_text = "new one(Click on New file to remove this text)\nThis is a distraction-free notepad app \ndesigned to help you capture ideas,\n jot down notes, and stay focused\n on what matters most.\n Zen text editor helps you concentrate on \n your current thoughts and ideas,\n allowing everything else to\n gently fade into the background.\n\n  Just hover your mouse over the text to get started,\n let your focus flow effortlessly.\n Stay present, stay focused.\n"
+        self.sample_text = "(Click on New file to remove this text)\nThis is a distraction-free notepad app \ndesigned to help you capture ideas,\n jot down notes, and stay focused\n on what matters most.\n Zen Notepad helps you concentrate on \n your current thoughts and ideas,\n allowing everything else to\n gently fade into the background.\n\n  Just hover your mouse over the text to get started,\n let your focus flow effortlessly.\n Stay present, stay focused.\n"
         self.sample_text += "\n".join(f"Enjoy Peaceful Writting.. " for _ in range(1, 41))
         self.text.insert("1.0", self.sample_text)
         self.text.tag_config("center", justify="center")
@@ -203,7 +209,7 @@ class zeneditor(customtkinter.CTk):
             "• Align Text      -> Ctrl + J\n"
             "• Undo              -> Ctrl + Z\n"
             "• Redo              -> Ctrl + Y\n"
-            "• Delete Previous Word -> Ctrl + Backspace\n"
+            "• Delete last Word -> Ctrl + Backspace\n"
              )
             if self.dontshowagain == 0:
                 msg = CTkMessagebox(title="Info", message=instructions, width=600 , height=100, icon=self.icon_path, option_1="OK", option_2="Don't show this again", button_color="#0754b0", button_hover_color=self.button_hover_color)
